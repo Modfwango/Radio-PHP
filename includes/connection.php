@@ -13,7 +13,7 @@
 		}
 		
 		public function kill() {
-			Logger::info("Malfunction while sending/receiving data.  Terminating connection.");
+			Logger::info("Malfunction while sending/receiving data.  Terminating connection.  Error:  ".socket_last_error($this->socket));
 			socket_shutdown($this->socket);
 			socket_close($this->socket);
 			return true;
