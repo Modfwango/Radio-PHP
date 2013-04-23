@@ -32,7 +32,7 @@
 		public function getData() {
 			$status = @socket_read($this->socket, 8192);
 			
-			if ($status === false) {
+			if (is_resource($this->socket) && $status === false) {
 				$this->kill();
 			}
 			else {
@@ -54,7 +54,7 @@
 				$status = @socket_write($this->socket, $data); // Send data
 			}
 			
-			if ($status === false) {
+			if (is_resource($this->socket) && $status === false) {
 				$this->kill();
 				return false;
 			}
