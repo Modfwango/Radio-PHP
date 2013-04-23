@@ -15,8 +15,8 @@
 		public function kill() {
 			if (socket_last_error($this->socket) != 11) {
 				Logger::info("Malfunction while sending/receiving data.  Terminating connection.  Error:  ".socket_last_error($this->socket));
-				socket_shutdown($this->socket);
-				socket_close($this->socket);
+				@socket_shutdown($this->socket);
+				@socket_close($this->socket);
 				$this->socket = null;
 				return true;
 			}
