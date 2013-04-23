@@ -16,6 +16,7 @@
 			Logger::info("Malfunction while sending/receiving data.  Terminating connection.  Error:  ".socket_last_error($this->socket));
 			socket_shutdown($this->socket);
 			socket_close($this->socket);
+			$this->socket = null;
 			return true;
 		}
 		
@@ -30,7 +31,7 @@
 		}
 		
 		public function getData() {
-			if (($buf = @socket_read($this->socket, 8192)) === false) {
+			if (is_resource($this->socket) && ($buf = @socket_read($this->socket, 8192)) === false) {
 				$this->kill();
 			}
 			else {
