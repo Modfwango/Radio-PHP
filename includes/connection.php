@@ -31,7 +31,7 @@
 		}
 		
 		public function getData() {
-			if (is_resource($this->socket) && ($buf = @socket_read($this->socket, 8192)) === false) {
+			if (($buf = @socket_read($this->socket, 8192)) === false && is_resource($this->socket)) {
 				$this->kill();
 			}
 			else {
