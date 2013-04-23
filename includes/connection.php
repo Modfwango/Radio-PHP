@@ -30,13 +30,11 @@
 		}
 		
 		public function getData() {
-			$status = @socket_read($this->socket, 8192);
-			
-			if (is_resource($this->socket) && $status === false) {
+			if (($buf = @socket_read($this->socket, 8192)) === false) {
 				$this->kill();
 			}
 			else {
-				$data = trim($status);
+				$data = trim($buf);
 				if ($data != false && strlen($data) > 0) {
 					Logger::debug("Data received from client:  '".$data."'");
 					return $data;
