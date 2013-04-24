@@ -4,14 +4,13 @@
 		
 		public static function newConnection($connection) {
 			if (is_object($connection) && get_class($connection) == "Connection" && $connection->configured() == true) {
-				$i = 0;
-				while (isset(self::$connections[$i])) {
-					$i++;
-				}
+				self::$connections[] = $connection;
 				
-				self::$connections[$i] = $connection;
+				end(self::$connections);
+				$i = key(self::$connections);
+				
 				self::$connections[$i]->setID($i);
-				Logger::info("Connection #".self::$connections[$i]->getID()." added to the connection manager.");
+				Logger::info("Connection #".$i." added to the connection manager.");
 				return true;
 			}
 			return false;
