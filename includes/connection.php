@@ -63,7 +63,7 @@
 			return false;
 		}
 		
-		public function send($data) {
+		public function send($data, $newline = true) {
 			if (is_resource($this->socket)) {
 				Logger::debug("Sending data to client:  '".$data."'");
 				if ($newline == true) {
