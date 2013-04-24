@@ -39,7 +39,7 @@
 		
 		public function getData() {
 			if (is_resource($this->socket)) {
-				if (($buf = @socket_read($this->socket, 8192)) === false && socket_last_error($this->socket) != 11) {
+				if (($data = @socket_read($this->socket, 8192)) === false && socket_last_error($this->socket) != 11) {
 					$this->disconnect();
 				}
 				else {
