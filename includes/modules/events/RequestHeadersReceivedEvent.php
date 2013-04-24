@@ -1,22 +1,27 @@
 <?php
 	class @@CLASSNAME@@ {
 		public $name = "RequestHeadersReceivedEvent";
+		private $metadata = array();
 		
 		public function preprocessEvent($name, $registrations, $connection, $data) {
 			$preprocessors = $registrations[1];
 			$registrations = $registrations[0];
 			
-			if (!isset($connection->metadata['request']) || !isset($connection->metadata['headerslines'])) {
-				$connection->metadata['request'] = false;
-				$connection->metadata['headerslines'] = array();
+			if (!isset($this->metadata[$connection->getID()])) {
+				$this->metadata[$connection->getID()] = array();
 			}
 			
-			if ($connection->metadata['request'] == false) {
-				$connection->metadata['headerlines'][] = trim($data);
+			if (!isset($this->metadata[$connection->getID()]['request']) || !isset($this->metadata[$connection->getID()]['headerslines'])) {
+				$this->metadata[$connection->getID()]['request'] = false;
+				$this->metadata[$connection->getID()]['headerslines'] = array();
+			}
+			
+			if ($this->metadata[$connection->getID()]['request'] == false) {
+				$this->metadata[$connection->getID()]['headerlines'][] = trim($data);
 				
 				$get = false;
 				$icymeta = false;
-				foreach ($connection->metadata['headerlines'] as $headerline) {
+				foreach ($this->metadata[$connection->getID()]['headerlines'] as $headerline) {
 					if (preg_match("/^GET \\/ HTTP\\/1\\.(0|1)$/i", $headerline)) {
 						$get = true;
 					}
@@ -26,11 +31,11 @@
 				}
 				
 				if ($get == true && $icymeta == true) {
-					$connection->metadata['request'] = true;
+					$this->metadata[$connection->getID()]['request'] = true;
 					foreach ($registrations as $id => $registration) {
-						EventHandling::triggerEvent($name, $id, array($connection, trim(implode("\n", $connection->metadata['headerlines']))));
+						EventHandling::triggerEvent($name, $id, array($connection, trim(implode("\n", $this->metadata[$connection->getID()]['headerlines']))));
 					}
-					unset($connection->metadata['headerlines']);
+					unset($this->metadata[$connection->getID()]['headerlines']);
 				}
 			}
 		}
