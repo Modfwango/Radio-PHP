@@ -23,7 +23,7 @@
 		
 		public function getIP() {
 			if (is_resource($this->socket)) {
-				$address = socket_getpeername($this->socket);
+				socket_getpeername($this->socket, $address);
 				return gethostbyname($address);
 			}
 			return false;
@@ -31,7 +31,7 @@
 		
 		public function getHost() {
 			if (is_resource($this->socket)) {
-				$address = socket_getpeername($this->socket);
+				socket_getpeername($this->socket, $address);
 				return gethostbyaddr($address);
 			}
 			return false;
