@@ -1,6 +1,7 @@
 <?php
 	class Connection {
 		private $socket = null;
+		private $id = null;
 		
 		public function __construct($socket) {
 			if (is_resource($socket)) {
@@ -46,6 +47,18 @@
 						return $data;
 					}
 				}
+			}
+			return false;
+		}
+		
+		public function getID() {
+			return $this->id;
+		}
+		
+		public function setID($id) {
+			if ($this->id == null && is_numeric($id)) {
+				$this->id = intval($id);
+				return true;
 			}
 			return false;
 		}
