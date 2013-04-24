@@ -3,22 +3,26 @@
 		private static $connections = array();
 		
 		public static function newConnection($connection) {
-			if (is_object($connection) && get_class($connection) == "Connection") {
-				self::$connections[] = $connection;
-				Logger::debug("New connection added to the connection manager.");
+			if (is_object($connection) && get_class($connection) == "Connection" && $connection->configured() == true) {
+				$i = 0;
+				while (isset(self::$connections[$i])) {
+					$i++;
+				}
+				
+				self::$connections[$i] = $connection;
+				self::$connections[$i]->setID($i);
+				Logger::info("Connection #".self::$connections[$i]->getID()." added to the connection manager.");
 				return true;
 			}
 			return false;
 		}
 		
-		/*public static function getConnectionByNetworkName($name) { // This will need to be changed to something else.
-			foreach (self::$connections as $connection) {
-				if (strtolower(trim($name)) == strtolower(trim($connection->getNetworkName()))) {
-					return $connection;
-				}
+		public static function getConnectionByID($id) {
+			if (isset(self::$connections[$id])) {
+				return self::$connections[$id];
 			}
 			return false;
-		}*/
+		}
 		
 		public static function getConnections() {
 			return self::$connections;

@@ -1,20 +1,17 @@
 <?php
 	class Connection {
 		private $socket = null;
-		public $metadata = array();
 		
 		public function __construct($socket) {
 			if (is_resource($socket)) {
 				$this->socket = $socket;
-				$this->constructed = true;
 				return true;
 			}
 			return false;
 		}
 		
-		public function kill() {
-			if (socket_last_error($this->socket) != 11) {
-				Logger::info("Malfunction while sending/receiving data.  Terminating connection.  Error:  ".socket_last_error($this->socket));
+		public function disconnect() {
+			if (is_resource($this->socket)) {
 				@socket_shutdown($this->socket);
 				@socket_close($this->socket);
 				$this->socket = null;
@@ -24,43 +21,53 @@
 		}
 		
 		public function getIP() {
-			socket_getpeername($this->socket, $address);
-			return gethostbyname($address);
+			if (is_resource($this->socket)) {
+				return gethostbyname($this->socket);
+			}
+			return false;
 		}
 		
 		public function getHost() {
-			socket_getpeername($this->socket, $address);
-			return gethostbyaddr($address);
+			if (is_resource($this->socket)) {
+				return gethostbyaddr($this->socket);
+			}
+			return false;
 		}
 		
 		public function getData() {
-			if (($buf = @socket_read($this->socket, 8192)) === false && is_resource($this->socket)) {
-				$this->kill();
-			}
-			else {
-				$data = trim($buf);
-				if ($data != false && strlen($data) > 0) {
-					Logger::debug("Data received from client:  '".$data."'");
-					return $data;
+			if (is_resource($this->socket)) {
+				if ($buf = @socket_read($this->socket, 8192)) === false && socket_last_error($this->socket) != 11) {
+					$this->disconnect();
+				}
+				else {
+					$data = trim($buf);
+					if ($data != false && strlen($data) > 0) {
+						Logger::debug("Data received from client:  '".$data."'");
+						return $data;
+					}
 				}
 			}
 			return false;
 		}
 		
-		public function send($data, $newline = true) {
-			Logger::debug("Sending data to client:  '".$data."'");
-			if ($newline == true) {
-				$status = @socket_write($this->socket, $data."\n"); // Send data
-			}
-			else {
-				$status = @socket_write($this->socket, $data); // Send data
-			}
+		public function send($data) {
+			if (is_resource($this->socket)) {
+				Logger::debug("Sending data to client:  '".$data."'");
+				if ($newline == true) {
+					$status = @socket_write($this->socket, $data."\n"); // Send data
+				}
+				else {
+					$status = @socket_write($this->socket, $data); // Send data
+				}
 			
-			if (is_resource($this->socket) && $status === false) {
-				$this->kill();
-				return false;
+				if ($status === false) {
+					$this->disconnect();
+				}
+				else {
+					return true;
+				}
 			}
-			return true;
+			return false;
 		}
 	}
 ?>
