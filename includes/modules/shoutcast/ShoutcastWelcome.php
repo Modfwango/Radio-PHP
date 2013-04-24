@@ -7,7 +7,6 @@
 			$request = $data[1];
 			
 			Logger::info("Welcoming new client at ".$connection->getHost()." (".$connection->getIP().")");
-			Logger::debug($request);
 			
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
 			
