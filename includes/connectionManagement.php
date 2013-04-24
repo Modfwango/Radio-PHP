@@ -3,7 +3,7 @@
 		private static $connections = array();
 		
 		public static function newConnection($connection) {
-			if (is_object($connection) && get_class($connection) == "Connection" && $connection->configured() == true) {
+			if (is_object($connection) && get_class($connection) == "Connection") {
 				self::$connections[] = $connection;
 				
 				end(self::$connections);
