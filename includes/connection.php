@@ -23,14 +23,16 @@
 		
 		public function getIP() {
 			if (is_resource($this->socket)) {
-				return gethostbyname($this->socket);
+				$address = socket_getpeername($this->socket);
+				return gethostbyname($address);
 			}
 			return false;
 		}
 		
 		public function getHost() {
 			if (is_resource($this->socket)) {
-				return gethostbyaddr($this->socket);
+				$address = socket_getpeername($this->socket);
+				return gethostbyaddr($address);
 			}
 			return false;
 		}
