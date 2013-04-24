@@ -43,7 +43,6 @@
 					$this->disconnect();
 				}
 				else {
-					$data = trim($buf);
 					if ($data != false && strlen($data) > 0) {
 						Logger::debug("Data received from client:  '".$data."'");
 						return $data;
