@@ -19,10 +19,12 @@
 					$this->metadata[$connection->getID()]['headerlines'] = array();
 				}
 			
-				if ($data != null) {
-					$this->metadata[$connection->getID()]['headerlines'][] = $data;
+				if ($data != null && in_array(null, $data)) {
+					if (!in_array(null, $data)) {
+						$this->metadata[$connection->getID()]['headerlines'][] = $data;
+					}
 				}
-				else {
+				elseif (in_array(null, $data)) {
 					$headers = array();
 					foreach ($this->metadata[$connection->getID()]['headerlines'] as $id => $line) {
 						if (trim($line) == null) {
@@ -37,13 +39,13 @@
 									$val = array($tmp, implode(":", $val));
 									unset($tmp);
 								}
-							
+								
 								$headers[strtolower(preg_replace("[^a-zA-Z0-9]", null, $val[0]))] = $val[1];
 								unset($val);
 							}
 						}
 					}
-				
+					
 					foreach ($registrations as $id => $registration) {
 						EventHandling::triggerEvent($name, $id, array($connection->getID(), $this->metadata[$connection->getID()]['headerlines'], $headers));
 					}
