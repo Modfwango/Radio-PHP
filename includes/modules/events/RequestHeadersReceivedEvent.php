@@ -18,14 +18,14 @@
 				if (!isset($this->metadata[$connection->getID()]['headerlines'])) {
 					$this->metadata[$connection->getID()]['headerlines'] = array();
 				}
-			
-				if ($data != null && in_array(null, $data)) {
+				
+				$headers = array();
+				if ($data != null && in_array(null, $headers)) {
 					if (!in_array(null, $data)) {
 						$this->metadata[$connection->getID()]['headerlines'][] = $data;
 					}
 				}
 				elseif (in_array(null, $data)) {
-					$headers = array();
 					foreach ($this->metadata[$connection->getID()]['headerlines'] as $id => $line) {
 						if (trim($line) == null) {
 							unset($this->metadata[$connection->getID()]['headerlines'][$id]);
