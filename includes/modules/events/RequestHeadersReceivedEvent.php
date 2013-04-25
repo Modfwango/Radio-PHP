@@ -21,11 +21,11 @@
 				
 				$headers = array();
 				if ($data != null && in_array(null, $headers)) {
-					if (!in_array(null, $data)) {
+					if (!in_array(null, $headers)) {
 						$this->metadata[$connection->getID()]['headerlines'][] = $data;
 					}
 				}
-				elseif (in_array(null, $data)) {
+				elseif (in_array(null, $headers)) {
 					foreach ($this->metadata[$connection->getID()]['headerlines'] as $id => $line) {
 						if (trim($line) == null) {
 							unset($this->metadata[$connection->getID()]['headerlines'][$id]);
