@@ -32,7 +32,12 @@
 				$connection->send($line);
 			}
 			
-			ModuleManagement::getModuleByName("ShoutcastStream")->addClient(array($connection->getID(), $meta));
+			if (ModuleManagement::getModuleByName("ShoutcastStream")->addClient(array($connection->getID(), $meta))) {
+				Logger::info("Client added to stream listeners.");
+			}
+			else {
+				Logger::info("Unable to add client to stream listeners.")
+			}
 		}
 		
 		public function isInstantiated() {

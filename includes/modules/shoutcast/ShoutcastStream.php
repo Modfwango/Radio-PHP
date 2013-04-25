@@ -2,7 +2,6 @@
 	class @@CLASSNAME@@ {
 		public $name = "ShoutcastStream";
 		private $clients = array();
-		private $lastSentTime = 0;
 		
 		public function connectionLoopEnd($name, $data) {
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
