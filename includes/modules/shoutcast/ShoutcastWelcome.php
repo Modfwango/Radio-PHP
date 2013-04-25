@@ -36,7 +36,7 @@
 				Logger::info("Client added to stream listeners.");
 			}
 			else {
-				Logger::info("Unable to add client to stream listeners.")
+				Logger::info("Unable to add client to stream listeners.");
 			}
 		}
 		
