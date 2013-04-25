@@ -28,7 +28,7 @@
 			foreach (self::$events as $key => $event) {
 				if (count($event[2]) > 0) {
 					Logger::debug("Event '".$key."' is being preprocessed.");
-					$event[0]->$event[1]($key, array($event[2], $event[3]), $connection, trim($data));
+					$event[0]->$event[1]($key, array($event[2], $event[3]), $connection, $data);
 					Logger::debug("Event '".$key."' has been preprocessed.");
 				}
 			}
