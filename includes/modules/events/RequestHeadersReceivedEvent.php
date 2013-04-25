@@ -7,36 +7,45 @@
 			$preprocessors = $registrations[1];
 			$registrations = $registrations[0];
 			
+			$data = trim($data);
+			
 			if (!isset($this->metadata[$connection->getID()])) {
 				$this->metadata[$connection->getID()] = array();
 			}
 			
-			if (!isset($this->metadata[$connection->getID()]['request']) || !isset($this->metadata[$connection->getID()]['headerslines'])) {
-				$this->metadata[$connection->getID()]['request'] = false;
-				$this->metadata[$connection->getID()]['headerslines'] = array();
+			if (!isset($this->metadata[$connection->getID()]['headerlines'])) {
+				$this->metadata[$connection->getID()]['headerlines'] = array();
 			}
 			
-			if ($this->metadata[$connection->getID()]['request'] == false) {
-				$this->metadata[$connection->getID()]['headerlines'][] = trim($data);
-				
-				$get = false;
-				$icymeta = false;
-				foreach ($this->metadata[$connection->getID()]['headerlines'] as $headerline) {
-					if (preg_match("/^GET \\/ HTTP\\/1\\.(0|1)$/i", $headerline)) {
-						$get = true;
+			if ($data != null) {
+				$this->metadata[$connection->getID()]['headerlines'][] = $data;
+			}
+			else {
+				$headers = array();
+				foreach ($this->metadata[$connection->getID()]['headerlines'] as $id => $line) {
+					if (trim($line) == null) {
+						unset($this->metadata[$connection->getID()]['headerlines'][$id]);
 					}
-					elseif (preg_match("/^Icy-MetaData:\s?1$/i", $headerline)) {
-						$icymeta = true;
+					else {
+						if (stristr($line, ":")) {
+							$val = explode(":", $line);
+							if (count($val) > 2) {
+								$tmp = $val[0];
+								unset($val[0]);
+								$val = array($tmp, implode(":", $val));
+								unset($tmp);
+							}
+							
+							$headers[strtolower(preg_replace("[^a-zA-Z0-9]", null, $val[0]))] = $val[1];
+							unset($val);
+						}
 					}
 				}
 				
-				if ($get == true && $icymeta == true) {
-					$this->metadata[$connection->getID()]['request'] = true;
-					foreach ($registrations as $id => $registration) {
-						EventHandling::triggerEvent($name, $id, array($connection, trim(implode("\n", $this->metadata[$connection->getID()]['headerlines']))));
-					}
-					unset($this->metadata[$connection->getID()]['headerlines']);
+				foreach ($registrations as $id => $registration) {
+					EventHandling::triggerEvent($name, $id, array($connection->getID(), $this->metadata[$connection->getID()]['headerlines'], $headers));
 				}
+				unset($this->metadata[$connection->getID()]);
 			}
 		}
 		

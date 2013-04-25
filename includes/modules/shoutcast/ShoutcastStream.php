@@ -14,13 +14,18 @@
 					while (strlen($chunk[0]) < $length) {
 						$chunk[0] .= chr(0);
 					}
-					$client->send($chunk[0].$chunk[1], false);
+					if ($client[1] == true) {
+						$client[0]->send($chunk[0].$chunk[1], false);
+					}
+					else {
+						$client[0]->send($chunk[0], false);
+					}
 				}
 			}
 		}
 		
 		public function addClient($connection) {
-			if (is_object($connection)) {
+			if (is_array($connection) && is_object($connection[0]) && is_bool($connection[1])) {
 				$this->clients[] = $connection;
 				return true;
 			}

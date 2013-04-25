@@ -3,8 +3,9 @@
 		public $name = "ShoutcastWelcome";
 		
 		public function requestHeadersReceived($name, $data) {
-			$connection = $data[0];
+			$connection = ConnectionManagement::getConnectionByID($data[0]);
 			$request = $data[1];
+			$headers = $data[2];
 			
 			Logger::info("Welcoming new client at ".$connection->getHost()." (".$connection->getIP().")");
 			
@@ -20,14 +21,18 @@
 			$welcome[] = "icy-url: ".$config['url'];
 			$welcome[] = "icy-pub: 0";
 			$welcome[] = "icy-br: ".$config['bitrate'];
-			$welcome[] = "icy-metaint: ".intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
+			$meta = false;
+			if (isset($data[2]['icymetadata']) && $data[2]['icymetadata'] == '1') {
+				$meta = true;
+				$welcome[] = "icy-metaint: ".intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
+			}
 			$welcome[] = null;
 			
 			foreach ($welcome as $line) {
 				$connection->send($line);
 			}
 			
-			ModuleManagement::getModuleByName("ShoutcastStream")->addClient($connection);
+			ModuleManagement::getModuleByName("ShoutcastStream")->addClient(array($connection->getID(), $meta));
 		}
 		
 		public function isInstantiated() {
