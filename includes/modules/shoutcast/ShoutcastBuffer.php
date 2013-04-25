@@ -11,7 +11,11 @@
 			if ($this->mediapipes != null) {
 				$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
 				$payload = "StreamTitle='".$this->currentSong."';";
-				$metadata = chr(ceil(strlen($payload) / 16)).$payload.str_repeat(chr(0), ((ceil(strlen($payload) / 16) * 16) - strlen($payload)));
+				$metalength = ceil(strlen($payload) / 16);
+				$metadata = chr($metalength).$payload;
+				if ((strlen($metadata) - 1) < ($metalength * 16)) {
+					$metadata .= str_repeat(chr(0), (($metalength * 16) - strlen($payload)));
+				}
 				$data = null;
 				$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 				Logger::debug("Reading stream until ".$length." bytes.");
