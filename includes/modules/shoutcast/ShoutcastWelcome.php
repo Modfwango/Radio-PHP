@@ -15,6 +15,7 @@
 			$welcome[] = "HTTP/1.0 200 OK";
 			$welcome[] = "Content-Type: audio/mpeg";
 			$welcome[] = "Server: Radio-PHP (Based off Modfwango-Server) https://github.com/clayfreeman/Modfwango-Server";
+			$welcome[] = "Cache-Control: no-cache";
 			$welcome[] = "icy-br: ".$config['bitrate'];
 			$welcome[] = "icy-description: ".$config['description'];
 			$welcome[] = "icy-genre: ".$config['genre'];
