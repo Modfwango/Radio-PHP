@@ -7,7 +7,7 @@
 			$preprocessors = $registrations[1];
 			$registrations = $registrations[0];
 			
-			$chunk = explode("\n", $data);
+			$chunk = explode("\n", str_ireplace("\r", null, $data));
 			
 			foreach ($chunk as $data) {
 				$data = trim($data);
