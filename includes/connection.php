@@ -44,7 +44,7 @@
 				}
 				else {
 					if ($data != false && strlen($data) > 0) {
-						Logger::info("Data received from client:  '".$data."'");
+						Logger::debug("Data received from client:  '".$data."'");
 						return $data;
 					}
 				}
