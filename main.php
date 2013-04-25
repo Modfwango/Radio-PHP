@@ -63,15 +63,7 @@
 		foreach (ConnectionManagement::getConnections() as $connection) {
 			$data = $connection->getData();
 			if ($data != false) {
-				if (stristr($data, "\n")) {
-					$data = explode("\n", $data);
-					foreach ($data as $line) {
-						EventHandling::receiveData($connection, trim($line));
-					}
-				}
-				else {
-					EventHandling::receiveData($connection, $data);
-				}
+				EventHandling::receiveData($connection, $data);
 			}
 		}
 		
