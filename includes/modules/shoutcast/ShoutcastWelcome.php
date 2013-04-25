@@ -12,15 +12,15 @@
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
 			
 			$welcome = array();
-			$welcome[] = "ICY 200 OK";
+			$welcome[] = "HTTP/1.0 200 OK";
 			$welcome[] = "Content-Type: audio/mpeg";
-			$welcome[] = "icy-notice1: ".$config['notice'];
-			$welcome[] = "icy-notice2: Radio-PHP (Based off Modfwango-Server) https://github.com/clayfreeman/Modfwango-Server";
-			$welcome[] = "icy-name: ".$config['name'];
-			$welcome[] = "icy-genre: ".$config['genre'];
-			$welcome[] = "icy-url: ".$config['url'];
-			$welcome[] = "icy-pub: 0";
+			$welcome[] = "Server: Radio-PHP (Based off Modfwango-Server) https://github.com/clayfreeman/Modfwango-Server";
 			$welcome[] = "icy-br: ".$config['bitrate'];
+			$welcome[] = "icy-description: ".$config['description'];
+			$welcome[] = "icy-genre: ".$config['genre'];
+			$welcome[] = "icy-name: ".$config['name'];
+			$welcome[] = "icy-pub: -1";
+			$welcome[] = "icy-url: ".$config['url'];
 			$meta = false;
 			if (isset($data[2]['icymetadata']) && $data[2]['icymetadata'] == '1') {
 				$meta = true;
