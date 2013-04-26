@@ -38,7 +38,7 @@
 										unset($tmp);
 									}
 								
-									$headers[strtolower(preg_replace("[^a-zA-Z0-9]", null, $val[0]))] = $val[1];
+									$headers[strtolower(preg_replace("/[^a-zA-Z0-9]/", null, $val[0]))] = $val[1];
 									unset($val);
 								}
 							}
