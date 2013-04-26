@@ -25,6 +25,12 @@
 		
 		public function addClient($connection) {
 			if (is_array($connection) && is_numeric($connection[0]) && is_bool($connection[1])) {
+				if ($connection[1] == true) {
+					Logger::info("Client will receive metadata.");
+				}
+				else {
+					Logger::info("Client will not receive metadata.");
+				}
 				$this->clients[] = $connection;
 				return true;
 			}
