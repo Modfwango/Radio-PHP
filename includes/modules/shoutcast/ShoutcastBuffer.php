@@ -16,8 +16,8 @@
 				if (strlen($payload) < ($metalength * 16)) {
 					$metadata .= str_repeat(chr(0), (($metalength * 16) - strlen($payload)));
 				}
-				if (ord(substr($metadata, 0, 1)) != (strlen($metadata) - 1)) {
-					Logger::info("Metadata did not pass the parse check.  It is not going to be sent in this chunk.  The size byte does not match ".(strlen($metadata) - 1).".  Raw data:  [{".ord(substr($metadata, 0, 1))."}]".substr($metadata, 1));
+				if ((ord(substr($metadata, 0, 1)) * 16) != (strlen($metadata) - 1)) {
+					Logger::info("Metadata did not pass the parse check.  It is not going to be sent in this chunk.  The size byte times 16 does not match ".(strlen($metadata) - 1).".  Raw data:  [{".ord(substr($metadata, 0, 1))."}]".substr($metadata, 1));
 					$metadata = chr(0);
 				}
 				$data = null;
