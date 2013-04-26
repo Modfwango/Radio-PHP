@@ -7,6 +7,8 @@
 			$request = $data[1];
 			$headers = $data[2];
 			
+			Logger::info(var_export($headers, true));
+			
 			Logger::info("Welcoming new client at ".$connection->getHost()." (".$connection->getIP().")");
 			
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
@@ -23,7 +25,7 @@
 			$welcome[] = "icy-pub: -1";
 			$welcome[] = "icy-url: ".$config['url'];
 			$meta = false;
-			if (isset($data[2]['icymetadata']) && $data[2]['icymetadata'] == '1') {
+			if (isset($headers['icymetadata']) && $headers['icymetadata'] == '1') {
 				$meta = true;
 				$welcome[] = "icy-metaint: ".intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 			}
