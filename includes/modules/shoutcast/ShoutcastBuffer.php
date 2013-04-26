@@ -13,8 +13,12 @@
 				$payload = "StreamTitle='".$this->currentSong."';";
 				$metalength = ceil(strlen($payload) / 16);
 				$metadata = chr($metalength).$payload;
-				if ((strlen($metadata) - 1) < ($metalength * 16)) {
+				if (strlen($payload) < ($metalength * 16)) {
 					$metadata .= str_repeat(chr(0), (($metalength * 16) - strlen($payload)));
+				}
+				if (ord(substr($metadata, 0, 1)) != (strlen($metadata) - 1)) {
+					Logger::info("Metadata did not pass the parse check.  It is not going to be sent in this chunk.");
+					$metadata = chr(0);
 				}
 				$data = null;
 				$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
