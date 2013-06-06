@@ -17,7 +17,7 @@
 					$metadata .= str_repeat(chr(0), (($metalength * 16) - strlen($payload)));
 				}
 				$data = null;
-				$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__)) * 2; // * 2 for extra buffer
+				$length = intval(((($config['bitrate'] / 8) + 4) * 1024) / (1000000 / __INTERVAL__));
 				Logger::debug("Reading stream until ".$length." bytes.");
 				$status = proc_get_status($this->mediaprocess);
 				while ($status['running'] != false && strlen($data) < $length) {
