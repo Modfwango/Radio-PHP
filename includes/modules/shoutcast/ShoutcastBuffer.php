@@ -63,7 +63,7 @@
 				1 => array("pipe", "w"),
 				2 => array("pipe", "a")
 			);
-			$cmd = "avconv -v quiet -i ".escapeshellarg($song)." -c libmp3lame -ar ".$config['samplerate']." -ab ".$config['bitrate']."k -f mp3 - && echo 'TRANSCODEFINISHED'";
+			$cmd = "avconv -v quiet -i ".escapeshellarg($song)." -c libmp3lame -ar ".$config['samplerate']." -ab ".$config['bitrate']."k -f mp3 -";
 			$this->mediaprocess = proc_open($cmd, $descriptorspec, $this->mediapipes);
 			stream_set_blocking($this->mediapipes[0], 0); //
 			stream_set_blocking($this->mediapipes[1], 0); //
