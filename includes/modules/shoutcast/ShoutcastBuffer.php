@@ -25,7 +25,6 @@
 					$data .= $buf;
 					$status = proc_get_status($this->mediaprocess);
 				}
-				Logger::info("Got ".strlen($data)." bytes from stream.");
 				
 				if ($status['running'] == false) {
 					Logger::info("End of song.  Switching to a new song.");
