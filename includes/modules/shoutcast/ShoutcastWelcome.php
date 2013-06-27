@@ -24,7 +24,7 @@
 			$meta = false;
 			if (isset($headers['icymetadata']) && trim($headers['icymetadata']) == '1') {
 				$meta = true;
-				$welcome[] = "icy-metaint: ".intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__)) * 2;
+				$welcome[] = "icy-metaint: ".intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 			}
 			$welcome[] = null;
 			
