@@ -19,23 +19,20 @@
 				$data = null;
 				$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 				Logger::debug("Reading stream until ".$length." bytes.");
-				$status = proc_get_status($this->mediaprocess);
-				while ($status['running'] != false && strlen($data) < $length) {
+				while (strlen($data) < $length && substr($data, -17) != 'TRANSCODEFINISHED') {
 					$buf = fread($this->mediapipes[1], 1);
 					$data .= $buf;
-					$status = proc_get_status($this->mediaprocess);
 				}
+				$data = substr($data, 0, $length);
 				
-				if ($status['running'] == false) {
+				if (strlen($data) < $length) {
 					Logger::info("End of song.  Switching to a new song.");
 					$this->currentSong = null;
 					$this->mediaprocess = null;
 					$this->mediapipes = null;
 					$this->seenBytes = false;
 					$this->transcode(ModuleManagement::getModuleByName("ShoutcastSource")->loadSong());
-					if (strlen($data) < $length) {
-						$data .= str_repeat(chr(0), ($length - strlen($data)));
-					}
+					$data .= str_repeat(chr(0), ($length - strlen($data)));
 				}
 				else {
 					$this->seenBytes = true;
