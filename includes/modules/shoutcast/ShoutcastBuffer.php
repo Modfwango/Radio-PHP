@@ -19,25 +19,26 @@
 				$data = null;
 				$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 				Logger::debug("Reading stream until ".$length." bytes.");
-				while (strlen($data) < $length && substr($data, -17) != 'TRANSCODEFINISHED') {
+				for ($i = 0; $i < $length; $i++) {
 					$buf = fread($this->mediapipes[1], 1);
 					$data .= $buf;
 				}
-				$data = substr($data, 0, $length);
 				
-				if (strlen($data) < $length) {
-					Logger::info("End of song.  Switching to a new song.");
-					$this->currentSong = null;
-					$this->mediaprocess = null;
-					$this->mediapipes = null;
-					$this->seenBytes = false;
-					$this->transcode(ModuleManagement::getModuleByName("ShoutcastSource")->loadSong());
-					$data .= str_repeat(chr(0), ($length - strlen($data)));
-				}
-				else {
+				if (strlen($data) > 0) {
 					$this->seenBytes = true;
 					Logger::debug("Chunk with ".strlen($data)." bytes returned.  MD5:  ".hash("md5", $data));
-					$chunk = array($data, $metadata);	
+					$chunk = array($data, $metadata);
+				}
+				else {
+					if ($this->seenBytes == true) {
+						Logger::info("End of song.  Switching to a new song.");
+						$this->currentSong = null;
+						$this->mediaprocess = null;
+						$this->mediapipes = null;
+						$this->seenBytes = false;
+						$this->transcode(ModuleManagement::getModuleByName("ShoutcastSource")->loadSong());
+						$chunk = $this->getNextChunk();
+					}
 				}
 			}
 			else {
@@ -59,7 +60,7 @@
 				1 => array("pipe", "w"),
 				2 => array("pipe", "a")
 			);
-			$cmd = "avconv -v quiet -i ".escapeshellarg($song)." -c libmp3lame -ar ".$config['samplerate']." -ab ".$config['bitrate']."k -f mp3 - && echo 'TRANSCODEFINISHED'";
+			$cmd = "avconv -v quiet -i ".escapeshellarg($song)." -c libmp3lame -ar ".$config['samplerate']." -ab ".$config['bitrate']."k -f mp3 -";
 			$this->mediaprocess = proc_open($cmd, $descriptorspec, $this->mediapipes);
 			stream_set_blocking($this->mediapipes[0], 0); //
 			stream_set_blocking($this->mediapipes[1], 0); //
