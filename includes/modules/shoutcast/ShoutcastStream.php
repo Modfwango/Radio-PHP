@@ -5,7 +5,7 @@
 		
 		public function connectionLoopEnd($name, $data) {
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
-			$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__)) * 2;
+			$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 			$chunk = ModuleManagement::getModuleByName("ShoutcastBuffer")->getNextChunk();
 			
 			foreach ($this->clients as $id => &$client) {
