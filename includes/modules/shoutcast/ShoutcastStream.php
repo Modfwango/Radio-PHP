@@ -2,22 +2,32 @@
 	class @@CLASSNAME@@ {
 		public $name = "ShoutcastStream";
 		private $clients = array();
+		private $offset = 0;
+		private $temp = null;
 		
 		public function connectionLoopEnd($name, $data) {
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
 			$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 			$chunk = ModuleManagement::getModuleByName("ShoutcastBuffer")->getNextChunk();
+			if ($offset > 0) {
+				$chunk[0] = $this->temp.$chunk[0];
+				$this->temp = substr($chunk[0], $length);
+				$chunk[0] = substr($chunk[0], 0, $length);
+			}
 			
 			foreach ($this->clients as $id => &$client) {
 				if (isset($chunk[0]) && strlen($chunk[0]) > 0) {
-					while (strlen($chunk[0]) < $length) {
-						$chunk[0] .= chr(0);
-					}
-					if ($client[1] == true) {
-						ConnectionManagement::getConnectionByID($client[0])->send($chunk[0].$chunk[1], false);
+					if (strlen($chunk[0]) < $length) {
+						$this->offset = $length - $chunk[0];
+						$this->temp = $chunk[0];
 					}
 					else {
-						ConnectionManagement::getConnectionByID($client[0])->send($chunk[0], false);
+						if ($client[1] == true) {
+							ConnectionManagement::getConnectionByID($client[0])->send($chunk[0].$chunk[1], false);
+						}
+						else {
+							ConnectionManagement::getConnectionByID($client[0])->send($chunk[0], false);
+						}
 					}
 				}
 			}
