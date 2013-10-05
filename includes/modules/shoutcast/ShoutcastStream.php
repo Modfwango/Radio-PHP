@@ -17,7 +17,16 @@
 			foreach ($this->clients as $id => &$client) {
 				if (isset($chunk[0]) && strlen($chunk[0]) > 0) {
 					if (strlen($chunk[0]) < $length) {
-						$this->temp = $chunk[0]; // Potential memory leak if strlen($this->temp) > $length (maybe?)
+						$this->temp .= $chunk[0];
+						while (strlen($this->temp) > $length) {
+							if ($client[1] == true) {
+								ConnectionManagement::getConnectionByID($client[0])->send(substr($this->temp, 0, $length).$chunk[1], false);
+							}
+							else {
+								ConnectionManagement::getConnectionByID($client[0])->send(substr($this->temp, 0, $length), false);
+							}
+							$this->temp = substr($this->temp, $length);
+						}
 					}
 					else {
 						if ($client[1] == true) {
