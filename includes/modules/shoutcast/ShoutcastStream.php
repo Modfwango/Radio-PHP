@@ -3,11 +3,15 @@
 		public $name = "ShoutcastStream";
 		private $clients = array();
 		private $temp = null;
+		private $lastMeta = null;
 		
 		public function connectionLoopEnd($name, $data) {
 			$config = ModuleManagement::getModuleByName("ShoutcastConfig")->getConfig();
 			$length = intval(((($config['bitrate'] / 8) + 1) * 1024) / (1000000 / __INTERVAL__));
 			$chunk = ModuleManagement::getModuleByName("ShoutcastBuffer")->getNextChunk();
+			if (isset($chunk[1]) && strlen($chunk[1]) > 0) {
+				$this->lastMeta = $chunk[1];
+			}
 			if ($this->temp != null) {
 				$chunk[0] = $this->temp.$chunk[0];
 				$this->temp = substr($chunk[0], $length);
@@ -20,7 +24,7 @@
 						$this->temp .= $chunk[0];
 						while (strlen($this->temp) > $length) {
 							if ($client[1] == true) {
-								ConnectionManagement::getConnectionByID($client[0])->send(substr($this->temp, 0, $length).$chunk[1], false);
+								ConnectionManagement::getConnectionByID($client[0])->send(substr($this->temp, 0, $length).$this->lastMeta, false);
 							}
 							else {
 								ConnectionManagement::getConnectionByID($client[0])->send(substr($this->temp, 0, $length), false);
@@ -30,7 +34,7 @@
 					}
 					else {
 						if ($client[1] == true) {
-							ConnectionManagement::getConnectionByID($client[0])->send($chunk[0].$chunk[1], false);
+							ConnectionManagement::getConnectionByID($client[0])->send($chunk[0].$this->lastMeta, false);
 						}
 						else {
 							ConnectionManagement::getConnectionByID($client[0])->send($chunk[0], false);
