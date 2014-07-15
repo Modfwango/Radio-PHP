@@ -16,4 +16,4 @@ Support
 =======
 ***
 
-For support with this bot's framework, join our IRC channel at `irc.tinycrab.net` port `6667` channel `#modfwango`.
+For support with this repo, join our IRC channel at `irc.freenode.org` port `6667` channel `#modfwango`.
