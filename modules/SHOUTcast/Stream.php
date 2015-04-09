@@ -65,7 +65,7 @@
       shuffle($selections);
       Logger::debug("Possible songs:");
       Logger::debug(var_export($selections, true));
-      array_shift($this->history, $selections[0]);
+      array_unshift($this->history, $selections[0]);
       $this->meta = $this->metadata->getMetadata($this->getSong());
       Logger::debug("Switching to song \"".$this->getSong()."\"...");
       Logger::debug($this->meta);
