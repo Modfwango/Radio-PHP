@@ -18,7 +18,7 @@ sudo apt-get install -y libav-tools libmp3lame-dev php5-cli
 After installing the necessary packages, clone this repository and its
 submodules:
 ```sh
-git clone https://github.com/ClayFreeman/Radio-PHP.git
+git clone https://github.com/Modfwango/Radio-PHP.git
 cd Radio-PHP && git submodule update --init
 ```
 
