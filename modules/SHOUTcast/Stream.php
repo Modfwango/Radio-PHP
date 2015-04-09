@@ -54,10 +54,17 @@
       $repeatfreq = $this->welcome->getOption("repeatfreq");
       $repeatfreq = ($repeatfreq > count($this->getSongs()) ?
         count($this->getSongs()) : $repeatfreq);
+      Logger::debug("Max history length: ".$repeatfreq);
+      Logger::debug("History before prune:");
+      Logger::debug(var_export($this->history, true));
       while (count($this->history) >= $repeatfreq)
         array_pop($this->history);
+      Logger::debug("History after prune:");
+      Logger::debug(var_export($this->history, true));
       $selections = array_diff($this->getSongs(), $this->history);
       shuffle($selections);
+      Logger::debug("Possible songs:");
+      Logger::debug(var_export($selections, true));
       array_push($this->history, $selections[0]);
       $this->meta = $this->metadata->getMetadata($this->getSong());
       Logger::debug("Switching to song \"".$this->getSong()."\"...");
