@@ -23,7 +23,8 @@ cd Radio-PHP && git submodule update --init
 ```
 
 Next, configure the options in the `data/Welcome/config.json` file to your
-liking. After you have configured Radio-PHP, start it with `php main.php`
+liking. After you have configured Radio-PHP, place some media in the folder
+specified in the config and start the daemon with `php main.php`
 
 Licensing
 =========
