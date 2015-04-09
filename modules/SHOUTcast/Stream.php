@@ -36,7 +36,7 @@
     }
 
     public function getSong() {
-      return $this->history[0];
+      return (isset($this->history[0]) ? $this->history[0] : false);
     }
 
     public function getSongs() {
@@ -78,17 +78,22 @@
 
     public function receiveConnectionLoopEnd() {
       if (count($this->getClients()) > 0) {
-        $burstint = $this->welcome->getOption("burstint");
-        if (strlen($this->pool) >= $burstint) {
-          $buf = $this->getPool($burstint);
-          foreach ($this->getClients() as $client) {
-            if ($client->getOption("metadata")) {
-              $client->send($buf.$this->meta, false);
-            }
-            else {
-              $client->send($buf, false);
+        if ($this->getSong() != false) {
+          $burstint = $this->welcome->getOption("burstint");
+          if (strlen($this->pool) >= $burstint) {
+            $buf = $this->getPool($burstint);
+            foreach ($this->getClients() as $client) {
+              if ($client->getOption("metadata")) {
+                $client->send($buf.$this->meta, false);
+              }
+              else {
+                $client->send($buf, false);
+              }
             }
           }
+        }
+        else {
+          $this->nextSong();
         }
       }
     }
@@ -97,7 +102,6 @@
       $this->metadata = ModuleManagement::getModuleByName("Metadata");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
       $this->meta = $this->metadata->getMetadata(null);
-      $this->nextSong();
       EventHandling::registerForEvent("connectionLoopEndEvent", $this,
         "receiveConnectionLoopEnd");
       return true;
