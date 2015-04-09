@@ -32,7 +32,7 @@ Development
 ===========
 
 In order to develop your own features and such, take a look at
-[this link](http://modfwango.com/Modfwango/blob/master/docs/README.md) for more
+[this link](http://modfwango.com/Modfwango/blob/master/README.md) for more
 information.
 
 Licensing
