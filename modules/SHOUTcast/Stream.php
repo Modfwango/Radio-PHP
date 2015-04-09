@@ -42,7 +42,7 @@
     public function getSongs() {
       $songs = array();
       foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
-          $this->welcome->getOption("music"))) as $file) {
+          $this->welcome->getOption("music"))) as $file => $obj) {
         if (is_file($file)) {
           $songs[] = $file;
         }
