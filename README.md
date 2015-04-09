@@ -24,7 +24,16 @@ cd Radio-PHP && git submodule update --init
 
 Next, configure the options in the `data/Welcome/config.json` file to your
 liking. After you have configured Radio-PHP, place some media in the folder
-specified in the config and start the daemon with `php main.php`
+specified in the config and start the daemon with `php main.php`. By default
+Radio-PHP listens on all interfaces on port `8000`. This can be changed in
+`conf/listen.conf`
+
+Development
+===========
+
+In order to develop your own features and such, take a look at
+[this link](http://modfwango.com/Modfwango/blob/master/docs/README.md) for more
+information.
 
 Licensing
 =========
