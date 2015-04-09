@@ -16,7 +16,7 @@
           $this->welcome->getOption("burstint")));
       }
 
-      if (!is_resource($this->process)) {
+      if (!is_resource($this->process) || feof($this->pipes[1])) {
         @proc_close($this->process);
         $this->process = null;
 
