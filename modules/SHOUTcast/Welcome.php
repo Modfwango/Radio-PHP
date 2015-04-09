@@ -14,7 +14,7 @@
       if (is_array($config)) {
         $this->config = $config;
         $this->config["burstint"] = intval((($this->config["bitrate"] * 1000) /
-          8) * (__DELAY__ / 800000));
+          8) * (__DELAY__ / 1100000));
         return true;
       }
       else {
