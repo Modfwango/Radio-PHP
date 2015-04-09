@@ -97,6 +97,7 @@
       $this->metadata = ModuleManagement::getModuleByName("Metadata");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
       $this->meta = $this->metadata->getMetadata(null);
+      $this->nextSong();
       EventHandling::registerForEvent("connectionLoopEndEvent", $this,
         "receiveConnectionLoopEnd");
       return true;
