@@ -41,6 +41,7 @@
           stream_set_blocking($this->pipes[1], 0);
           stream_set_blocking($this->pipes[2], 0);
         }
+        if ($this->stream->getSong() == false) $this->stream->nextSong();
       }
     }
 

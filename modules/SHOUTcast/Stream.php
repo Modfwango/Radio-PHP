@@ -78,22 +78,17 @@
 
     public function receiveConnectionLoopEnd() {
       if (count($this->getClients()) > 0) {
-        if ($this->getSong() != false) {
-          $burstint = $this->welcome->getOption("burstint");
-          if (strlen($this->pool) >= $burstint) {
-            $buf = $this->getPool($burstint);
-            foreach ($this->getClients() as $client) {
-              if ($client->getOption("metadata")) {
-                $client->send($buf.$this->meta, false);
-              }
-              else {
-                $client->send($buf, false);
-              }
+        $burstint = $this->welcome->getOption("burstint");
+        if (strlen($this->pool) >= $burstint) {
+          $buf = $this->getPool($burstint);
+          foreach ($this->getClients() as $client) {
+            if ($client->getOption("metadata")) {
+              $client->send($buf.$this->meta, false);
+            }
+            else {
+              $client->send($buf, false);
             }
           }
-        }
-        else {
-          $this->nextSong();
         }
       }
     }
