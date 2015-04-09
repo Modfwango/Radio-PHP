@@ -20,6 +20,7 @@
         if (!is_resource($this->process) || feof($this->pipes[1])) {
           @proc_close($this->process);
           $this->process = null;
+          $this->pipes = null;
 
           // Switch song
           $this->stream->nextSong();
@@ -42,6 +43,13 @@
           stream_set_blocking($this->pipes[2], 0);
         }
         if ($this->stream->getSong() == false) $this->stream->nextSong();
+      }
+      else {
+        if (is_resource($this->process)) {
+          @proc_close($this->process);
+          $this->process = null;
+          $this->pipes = null;
+        }
       }
     }
 

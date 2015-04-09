@@ -91,6 +91,10 @@
           }
         }
       }
+      else {
+        // Empty the pool
+        $this->getPool();
+      }
     }
 
     public function isInstantiated() {
