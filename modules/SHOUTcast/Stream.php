@@ -77,23 +77,17 @@
     }
 
     public function receiveConnectionLoopEnd() {
-      if (count($this->getClients()) > 0) {
-        $burstint = $this->welcome->getOption("burstint");
-        if (strlen($this->pool) >= $burstint) {
-          $buf = $this->getPool($burstint);
-          foreach ($this->getClients() as $client) {
-            if ($client->getOption("metadata")) {
-              $client->send($buf.$this->meta, false);
-            }
-            else {
-              $client->send($buf, false);
-            }
+      $burstint = $this->welcome->getOption("burstint");
+      if (strlen($this->pool) >= $burstint) {
+        $buf = $this->getPool($burstint);
+        foreach ($this->getClients() as $client) {
+          if ($client->getOption("metadata")) {
+            $client->send($buf.$this->meta, false);
+          }
+          else {
+            $client->send($buf, false);
           }
         }
-      }
-      else {
-        // Empty the pool
-        $this->getPool();
       }
     }
 
