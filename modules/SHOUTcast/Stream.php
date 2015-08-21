@@ -80,7 +80,7 @@
       if (count($this->getClients()) > 0) {
         $burstint = $this->welcome->getOption("burstint");
         if (strlen($this->pool) >= $burstint) {
-          $buf = $this->getPool($burstint);
+          $buf = $this->getPool($burstint * (__DELAY__ / 1000000));
           foreach ($this->getClients() as $client) {
             $data = $buf.($client->getOption("metadata") ? $this->meta : null);
             if ($client->getOption("preload") >= 0) {
