@@ -13,7 +13,7 @@
       if (!@feof($this->pipes[1])) {
         // Logger::debug("Reading MP3 data...");
         $this->stream->putPool(@fread($this->pipes[1],
-          $this->welcome->getOption("burstint") * 8));
+          $this->welcome->getOption("burstint")));
       }
 
       if (!is_resource($this->process) || feof($this->pipes[1])) {
