@@ -82,12 +82,19 @@
         if (strlen($this->pool) >= $burstint) {
           $buf = $this->getPool($burstint);
           foreach ($this->getClients() as $client) {
-            if ($client->getOption("metadata")) {
-              $client->send($buf.$this->meta, false);
+            $data = $buf.($client->getOption("metadata") ? $this->meta : null);
+            if ($client->getOption("preload") >= 0) {
+              if ($client->getOption("preload") > 0) {
+                $client->setOption("preloadbuf",
+                  $client->getOption("preloadbuf").$data);
+              }
+              else {
+                $client->send($client->getOption("preloadbuf"), false);
+                $client->setOption("preloadbuf", false);
+              }
+              $client->setOption("preload", $client->getOption("preload") - 1);
             }
-            else {
-              $client->send($buf, false);
-            }
+            if ($client->getOption("preload") < 0) $client->send($data, false);
           }
         }
       }

@@ -14,7 +14,7 @@
       if (is_array($config)) {
         $this->config = $config;
         $this->config["burstint"] = intval((($this->config["bitrate"] * 1000) /
-          8) * (__DELAY__ / 950000));
+          8) * (__DELAY__ / 1000000));
         return true;
       }
       else {
@@ -24,6 +24,7 @@
           "genre" => "Liquid Drum and Bass",
           "name" => "LiquidStation",
           "music" => "/var/private/music",
+          "preload" => 8,
           "repeatfreq" => 30,
           "samplerate" => 44100,
           "url" => "http://example.org"
@@ -69,6 +70,8 @@
           }
           $connection->send(trim(implode($ending, $response)).$ending.$ending,
             false);
+          $connection->setOption("preload", $this->config["preload"] /
+            (__DELAY__ / 1000000));
           $connection->setOption("ready", true);
         }
       }
