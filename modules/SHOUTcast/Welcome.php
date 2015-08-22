@@ -24,7 +24,7 @@
           "genre" => "Liquid Drum and Bass",
           "name" => "LiquidStation",
           "music" => "/var/private/music",
-          "preload" => 8,
+          "preload" => 2,
           "repeatfreq" => 30,
           "samplerate" => 44100,
           "url" => "http://example.org"
