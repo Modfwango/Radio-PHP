@@ -8,6 +8,8 @@
     private $metadata = null;
     private $pool = null;
     private $songs = array();
+    private $timer = null;
+    private $welcome = null;
 
     public function getPool($bytes = 0, $flush = true) {
       $buf = null;
@@ -76,7 +78,7 @@
       $this->pool .= $buf;
     }
 
-    public function receiveConnectionLoopEnd() {
+    public function broadcast() {
       if (count($this->getClients()) > 0) {
         $burstint = $this->welcome->getOption("burstint");
         if (strlen($this->pool) >= $burstint) {
@@ -102,14 +104,19 @@
         // Empty the pool
         $this->getPool();
       }
+      $this->scheduleBroadcast();
+    }
+
+    private function scheduleBroadcast() {
+      $this->timer->newTimer(0.01, $this, "broadcast", null);
     }
 
     public function isInstantiated() {
       $this->metadata = ModuleManagement::getModuleByName("Metadata");
+      $this->timer = ModuleManagement::getModuleByName("Timer");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
       $this->meta = $this->metadata->getMetadata(null);
-      EventHandling::registerForEvent("connectionLoopEndEvent", $this,
-        "receiveConnectionLoopEnd");
+      $this->scheduleBroadcast();
       return true;
     }
   }
