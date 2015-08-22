@@ -12,8 +12,12 @@
       // Check for data and process it if there is any
       if (!@feof($this->pipes[1])) {
         // Logger::debug("Reading MP3 data...");
-        $this->stream->putPool(@fread($this->pipes[1],
-          $this->welcome->getOption("burstint")));
+        $length = $this->welcome->getOption("burstint");
+        $data = @fread($this->pipes[1], $length);
+        if (strlen($data) < $length) {
+          $data .= str_repeat(chr(0), $length - strlen($data));
+        }
+        $this->stream->putPool($data);
       }
 
       if (!is_resource($this->process) || feof($this->pipes[1])) {
