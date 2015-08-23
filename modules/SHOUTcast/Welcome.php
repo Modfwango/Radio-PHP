@@ -24,37 +24,26 @@
           "value.  This field requires a%s value%s.";
 
         // Verify that required fields are present
-        foreach ($required as $key) {
+        foreach ($required as $key)
           if (!isset($config[$key])) {
             Logger::info(sprintf($not_defined, $key, escapeshellarg(
               StorageHandling::getPath($this, "config.json"))));
             return false;
           }
-        }
 
         // Autocomplete preload field if not given
-        if (!isset($config["preload"])) {
+        if (!isset($config["preload"]))
           $config["preload"] = 0;
-        }
 
-        // Verify that there is music to play
-        $music = null;
-        $songs = array();
         try {
-          // Prepare counter for directory
-          $music = new FilesystemIterator($config["music"],
-            FilesystemIterator::SKIP_DOTS);
-          // Get list of readable songs
           foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
-              $config["music"])) as $file => $obj) {
-            if (is_file($file) && is_readable($file)) {
+              $config["music"])) as $file => $obj)
+            if (is_file($file) && is_readable($file))
               $songs[] = $file;
-            }
-          }
         } catch (Exception $e) {}
+        // Verify that there is music to play
         if (!is_dir($config["music"]) || !is_readable($config["music"]) ||
-            !is_object($music) || iterator_count($music) < 1 ||
-            count($songs) < 1) {
+            !isset($songs) || count($songs) < 1) {
           Logger::info("Could not find any music to play.  Check that the ".
             "configuration option 'music' in the file at ".escapeshellarg(
             StorageHandling::getPath($this, "config.json"))." has the proper ".
@@ -174,16 +163,12 @@
       $data       = $data[1];
 
       if ($connection->getType() == "1") {
-        // Parse stream GET request
-        if (strtoupper($ex[0]) == "GET" && strtoupper($ex[2]) == "HTTP/1.1") {
-          // Set mount-point
+        // Parse stream GET request for a mount point (unused)
+        if (strtoupper($ex[0]) == "GET" && strtoupper($ex[2]) == "HTTP/1.1")
           $connection->setOption("stream", $ex[1]);
-        }
         // Parse metadata header which specifies if the client wants metadata
-        if (strtolower($data) == "icy-metadata: 1") {
-          // Set metadata parameter
+        if (strtolower($data) == "icy-metadata: 1")
           $connection->setOption("metadata", true);
-        }
         // Build response when end of request is reached
         if (trim($data) == null && $connection->getOption("stream") != false) {
           // Build an array of lines to send in the response header section
