@@ -131,8 +131,12 @@
           return false;
         }
 
+        // Set a polling rate (in seconds) to broadcast data
+        $config["rate"]     = 1;
+
         // Calculate the burstint field
-        $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) * 0.01);
+        $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) *
+          $config["rate"]);
 
         // Accept the config as given
         $this->config = $config;
@@ -192,7 +196,8 @@
           $connection->send(trim(implode("\r\n", $response))."\r\n\r\n", false);
 
           // Set the given preload quantity as configured
-          $connection->setOption("preload", $this->config["preload"] / 0.01);
+          $connection->setOption("preload", intval($this->config["preload"] /
+            $this->config["rate"]));
 
           // Signal the Stream module that this client is ready to receive the
           // broadcast
