@@ -136,8 +136,8 @@
     }
 
     private function scheduleBroadcast() {
-      // Create a timer to call $this->broadcast() in 0.01 seconds
-      $this->timer->newTimer(0.01, $this, "broadcast", null);
+      // Create a timer to call $this->broadcast() in 0.005 seconds
+      $this->timer->newTimer(0.005, $this, "broadcast", null);
     }
 
     public function isInstantiated() {
