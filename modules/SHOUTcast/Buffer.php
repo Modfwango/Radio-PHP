@@ -61,7 +61,7 @@
       // Create a Worker object
       $this->worker  = new Worker;
       // Add work to the worker
-      $this->worker->stack(Thread::from(function() {
+      $this->worker->stack(Threaded::from(function() {
         while (true) {
           $this->buffer->flushEncoder();
           usleep(10000);
