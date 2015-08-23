@@ -132,11 +132,11 @@
         }
 
         // Set a polling rate (in seconds) to broadcast data
-        $config["rate"]     = 0.0105;
+        $config["rate"]     = 0.01;
 
         // Calculate the burstint field
         $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) *
-          $config["rate"]);
+          $config["rate"] + 0.0005);
 
         // Accept the config as given
         $this->config = $config;
