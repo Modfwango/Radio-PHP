@@ -60,15 +60,17 @@
 
       // Create a Worker object
       $this->worker  = new Worker;
+      // Create work for the worker
+      $work = Threaded::from(function() {
+          while (true) {
+            $this->buffer->flushEncoder();
+            usleep(10000);
+          }
+        }, function($buffer) {
+          $this->buffer = $buffer;
+        }, array($this));
       // Add work to the worker
-      $this->worker->stack(Threaded::from(function() {
-        while (true) {
-          $this->buffer->flushEncoder();
-          usleep(10000);
-        }
-      }, function ($buffer) {
-        $this->buffer = $buffer;
-      }, array($this)));
+      $this->worker->stack($work);
 
       return true;
     }
