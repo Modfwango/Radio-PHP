@@ -65,7 +65,7 @@
       // Create work for the worker
       $GLOBALS['work'] = Thread::from(function() {
         while (true) {
-          $this->buffer->pollEncoder();
+          Thread::globally(function() { $this->buffer->pollEncoder(); });
           usleep(10000);
         }
       }, function($buffer) { $this->buffer = $buffer; }, array($this));
