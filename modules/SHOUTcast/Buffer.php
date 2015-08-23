@@ -59,7 +59,9 @@
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
 
       // Create a Worker object
-      $this->worker  = new Worker;
+      $this->worker  = new Worker();
+      // Start the worker
+      $this->worker->start();
       // Create work for the worker
       $work = Threaded::from(function() {
           while (true) {
@@ -73,8 +75,6 @@
         }, array($this));
       // Add work to the worker
       $this->worker->stack($work);
-      // Start the worker
-      $this->worker->start();
 
       return true;
     }
