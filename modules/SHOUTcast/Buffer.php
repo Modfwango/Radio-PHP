@@ -73,6 +73,8 @@
         }, array($this));
       // Add work to the worker
       $this->worker->stack($work);
+      // Start the worker
+      $this->worker->start();
 
       return true;
     }
