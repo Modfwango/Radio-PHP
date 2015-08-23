@@ -1,5 +1,5 @@
 <?php
-  class __CLASSNAME__ extends Thread {
+  class __CLASSNAME__ {
     public $depend = array("Stream", "Welcome");
     public $name = "Buffer";
     private $pipes = null;
@@ -53,11 +53,6 @@
       }
     }
 
-    public function run() {
-      Thread::globally(function() { $this->pollEncoder(); });
-      usleep(10000);
-    }
-
     public function isInstantiated() {
       // Fetch references to required modules
       $this->stream  = ModuleManagement::getModuleByName("Stream");
@@ -68,7 +63,12 @@
       // Start the worker
       $GLOBALS['worker']->start();
       // Add work for the worker
-      $GLOBALS['worker']->stack($this);
+      $GLOBALS['worker']->stack(Thread::from(function() {
+        while (true) {
+          $this->buffer->pollEncoder();
+          usleep(10000);
+        }
+      }, function($buffer) { $this->buffer = $buffer; }, $this);
 
       // // Register an event to periodically check the encoder state
       // EventHandling::registerForEvent("connectionLoopEndEvent", $this,
