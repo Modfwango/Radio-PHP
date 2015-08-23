@@ -68,7 +68,7 @@
           $this->buffer->pollEncoder();
           usleep(10000);
         }
-      }, function($buffer) { $this->buffer = $buffer; }, $this));
+      }, function($buffer) { $this->buffer = $buffer; }, array($this)));
 
       // // Register an event to periodically check the encoder state
       // EventHandling::registerForEvent("connectionLoopEndEvent", $this,
