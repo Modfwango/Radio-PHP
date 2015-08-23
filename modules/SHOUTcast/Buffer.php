@@ -62,13 +62,15 @@
       $GLOBALS['worker'] = new Worker();
       // Start the worker
       $GLOBALS['worker']->start();
-      // Add work for the worker
-      $GLOBALS['worker']->stack(Thread::from(function() {
+      // Create work for the worker
+      $GLOBALS['work'] = Thread::from(function() {
         while (true) {
           $this->buffer->pollEncoder();
           usleep(10000);
         }
-      }, function($buffer) { $this->buffer = $buffer; }, array($this)));
+      }, function($buffer) { $this->buffer = $buffer; }, array($this));
+      // Add work for the worker
+      $GLOBALS['worker']->stack($GLOBALS['work']);
 
       // // Register an event to periodically check the encoder state
       // EventHandling::registerForEvent("connectionLoopEndEvent", $this,
