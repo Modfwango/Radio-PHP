@@ -1,5 +1,5 @@
 <?php
-  class __CLASSNAME__ {
+  class __CLASSNAME__ extends Thread {
     public $depend = array("Stream", "Welcome");
     public $name = "Buffer";
     private $pipes = null;
@@ -53,6 +53,11 @@
       }
     }
 
+    public function run() {
+      $this->flushEncoder();
+      usleep(10000);
+    }
+
     public function isInstantiated() {
       // Fetch references to required modules
       $this->stream  = ModuleManagement::getModuleByName("Stream");
@@ -62,6 +67,8 @@
       $this->worker  = new Worker();
       // Start the worker
       $this->worker->start();
+      // Add work to the worker
+      $this->worker->stack($this);
 
       return true;
     }
