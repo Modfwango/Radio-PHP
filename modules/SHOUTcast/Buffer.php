@@ -1,5 +1,5 @@
 <?php
-  class __CLASSNAME__ extends Thread {
+  class __CLASSNAME__ {
     public $depend = array("Stream", "Welcome");
     public $name = "Buffer";
     private $pipes = null;
@@ -8,7 +8,7 @@
     private $stream = null;
     private $welcome = null;
 
-    public function flushEncoder() {
+    public function receiveConnectionLoopEnd() {
       // Check for EOF marker for the encoder output pipe
       if (!@feof($this->pipes[1])) {
         // Read "burstint" bytes from the encoder
@@ -53,23 +53,14 @@
       }
     }
 
-    public function run() {
-      $this->flushEncoder();
-      usleep(10000);
-    }
-
     public function isInstantiated() {
       // Fetch references to required modules
       $this->stream  = ModuleManagement::getModuleByName("Stream");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
 
-      // Create a Worker object
-      $GLOBALS['worker'] = new Worker();
-      // Start the worker
-      $GLOBALS['worker']->start();
-      // Add work to the worker
-      $GLOBALS['worker']->stack($this);
-
+      // Register an event to periodically check the encoder state
+      EventHandling::registerForEvent("connectionLoopEndEvent", $this,
+        "receiveConnectionLoopEnd");
       return true;
     }
   }

@@ -92,8 +92,8 @@
     }
 
     public function broadcast() {
-      // // Schedule another broadcast period
-      // $this->scheduleBroadcast();
+      // Schedule another broadcast period
+      $this->scheduleBroadcast();
 
       // If there are clients connected ...
       if (count($this->getClients()) > 0) {
@@ -150,12 +150,8 @@
       // Fetch a null metadata payload
       $this->meta = $this->metadata->getMetadata(null);
 
-      // // Schedule a broadcast to all clients
-      // $this->scheduleBroadcast();
-
-      // Register an event to periodically check the encoder state
-      EventHandling::registerForEvent("connectionLoopEndEvent", $this,
-        "broadcast");
+      // Schedule a broadcast to all clients
+      $this->scheduleBroadcast();
       return true;
     }
   }
