@@ -54,7 +54,7 @@
     }
 
     public function run() {
-      Thread::globally(array($this, 'pollEncoder'));
+      Thread::globally(function() { $this->pollEncoder(); });
       usleep(10000);
     }
 
