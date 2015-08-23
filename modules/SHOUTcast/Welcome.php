@@ -1,8 +1,8 @@
 <?php
   class __CLASSNAME__ {
-    public $depend = array();
-    public $name = "Welcome";
     private $config = array();
+    public  $depend = array();
+    public  $name   = "Welcome";
 
     public function getOption($name) {
       // Fetch the desired configuration option (if exists)
