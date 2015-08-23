@@ -38,10 +38,13 @@
         }
 
         // Verify that there is music to play
-        $music = new FilesystemIterator($config["music"],
-          FilesystemIterator::SKIP_DOTS);
+        $music = null;
+        try {
+          $music = new FilesystemIterator($config["music"],
+            FilesystemIterator::SKIP_DOTS);
+        } catch (Exception $e) {}
         if (!is_dir($config["music"]) || !is_readable($config["music"]) ||
-            iterator_count($music) < 1) {
+            !is_object($music) || iterator_count($music) < 1) {
           Logger::info("Could not find any music to play.  Check that the ".
             "configuration option 'music' in the file at ".escapeshellarg(
             StorageHandling::getPath($this, "config.json"))." has the proper ".
