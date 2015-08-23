@@ -45,7 +45,7 @@
       $songs = array();
       foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
           $this->welcome->getOption("music"))) as $file => $obj) {
-        if (is_file($file)) {
+        if (is_file($file) && is_readable($file)) {
           $songs[] = $file;
         }
       }

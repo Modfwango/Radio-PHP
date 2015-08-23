@@ -39,12 +39,22 @@
 
         // Verify that there is music to play
         $music = null;
+        $songs = array();
         try {
+          // Prepare counter for directory
           $music = new FilesystemIterator($config["music"],
             FilesystemIterator::SKIP_DOTS);
+          // Get list of readable songs
+          foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+              $config["music"])) as $file => $obj) {
+            if (is_file($file) && is_readable($file)) {
+              $songs[] = $file;
+            }
+          }
         } catch (Exception $e) {}
         if (!is_dir($config["music"]) || !is_readable($config["music"]) ||
-            !is_object($music) || iterator_count($music) < 1) {
+            !is_object($music) || iterator_count($music) < 1 ||
+            count($songs) < 1) {
           Logger::info("Could not find any music to play.  Check that the ".
             "configuration option 'music' in the file at ".escapeshellarg(
             StorageHandling::getPath($this, "config.json"))." has the proper ".
