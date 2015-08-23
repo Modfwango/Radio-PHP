@@ -8,7 +8,7 @@
     private $stream = null;
     private $welcome = null;
 
-    public function receiveConnectionLoopEnd() {
+    public function flushEncoder() {
       // Check for EOF marker for the encoder output pipe
       if (!@feof($this->pipes[1])) {
         // Read "burstint" bytes from the encoder
@@ -58,9 +58,18 @@
       $this->stream  = ModuleManagement::getModuleByName("Stream");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
 
-      // Register an event to periodically check the encoder state
-      EventHandling::registerForEvent("connectionLoopEndEvent", $this,
-        "receiveConnectionLoopEnd");
+      // Create a Worker object
+      $this->worker  = new Worker;
+      // Add work to the worker
+      $this->worker->stack(Thread::from(function() {
+        while (true) {
+          $this->buffer->flushEncoder();
+          usleep(10000);
+        }
+      }, function ($buffer) {
+        $this->buffer = $buffer;
+      }, array($this)));
+
       return true;
     }
   }
