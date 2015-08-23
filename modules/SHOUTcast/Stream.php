@@ -92,6 +92,9 @@
     }
 
     public function broadcast() {
+      // Schedule another broadcast period
+      $this->scheduleBroadcast();
+
       // If there are clients connected ...
       if (count($this->getClients()) > 0) {
         $burstint = $this->welcome->getOption("burstint");
@@ -130,9 +133,6 @@
       else if (count(ConnectionManagement::getConnections()) < 1)
         // Clear the pool if no clients are connected
         $this->getPool();
-
-      // Schedule another broadcast period
-      $this->scheduleBroadcast();
     }
 
     private function scheduleBroadcast() {
