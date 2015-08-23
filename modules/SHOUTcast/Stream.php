@@ -127,7 +127,7 @@
           }
         }
       }
-      else
+      else if (count(ConnectionManagement::getConnections()) < 1)
         // Clear the pool if no clients are connected
         $this->getPool();
 
