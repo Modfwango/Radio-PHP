@@ -63,7 +63,9 @@
       // Create work for the worker
       $work = Threaded::from(function() {
           while (true) {
-            $this->buffer->flushEncoder();
+            Threaded::globally(function() {
+              $this->buffer->flushEncoder();
+            });
             usleep(10000);
           }
         }, function($buffer) {
