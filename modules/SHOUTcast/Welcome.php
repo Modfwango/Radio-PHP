@@ -136,7 +136,7 @@
 
         // Calculate the burstint field
         $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) *
-          $config["rate"] * 2);
+          $config["rate"]);
 
         // Accept the config as given
         $this->config = $config;
