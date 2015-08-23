@@ -155,7 +155,7 @@
 
       // Register an event to periodically check the encoder state
       EventHandling::registerForEvent("connectionLoopEndEvent", $this,
-        "receiveConnectionLoopEnd");
+        "broadcast");
       return true;
     }
   }
