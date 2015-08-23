@@ -62,19 +62,6 @@
       $this->worker  = new Worker();
       // Start the worker
       $this->worker->start();
-      // Create work for the worker
-      $work = Threaded::from(function() {
-          while (true) {
-            Thread::globally(function() {
-              $this->buffer->flushEncoder();
-            });
-            usleep(10000);
-          }
-        }, function($buffer) {
-          $this->buffer = $buffer;
-        }, array($this));
-      // Add work to the worker
-      $this->worker->stack($work);
 
       return true;
     }
