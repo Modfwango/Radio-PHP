@@ -1,10 +1,11 @@
 {
-    "bitrate": 320,
-    "description": "Example station description tag",
-    "genre": "Liquid Drum and Bass",
-    "name": "LiquidStation",
+    "bitrate": 192,
+    "description": "Example station description.",
+    "genre": "Various Genres",
+    "name": "Untitled Station",
     "music": "\/var\/private\/music",
+    "preload": 3,
     "repeatfreq": 30,
     "samplerate": 44100,
-    "url": "http:\/\/example.org"
+    "url": "http:\/\/example.org\/"
 }
