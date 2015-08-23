@@ -132,8 +132,7 @@
         }
 
         // Calculate the burstint field
-        $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) *
-          (__DELAY__ / 1000000));
+        $config["burstint"] = intval((($config["bitrate"] * 1000) / 8) * 0.01);
 
         // Accept the config as given
         $this->config = $config;
@@ -193,8 +192,7 @@
           $connection->send(trim(implode("\r\n", $response))."\r\n\r\n", false);
 
           // Set the given preload quantity as configured
-          $connection->setOption("preload", $this->config["preload"] /
-            (__DELAY__ / 1000000));
+          $connection->setOption("preload", $this->config["preload"] / 0.01);
 
           // Signal the Stream module that this client is ready to receive the
           // broadcast
