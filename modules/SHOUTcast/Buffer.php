@@ -8,7 +8,7 @@
     private $stream = null;
     private $welcome = null;
 
-    public function pollEncoder() {
+    public function receiveConnectionLoopEnd() {
       // Check for EOF marker for the encoder output pipe
       if (!@feof($this->pipes[1])) {
         // Read "burstint" bytes from the encoder
@@ -58,23 +58,9 @@
       $this->stream  = ModuleManagement::getModuleByName("Stream");
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
 
-      // Create a worker
-      $GLOBALS['worker'] = new Worker();
-      // Start the worker
-      $GLOBALS['worker']->start();
-      // Create work for the worker
-      $GLOBALS['work'] = Thread::from(function() {
-        while (true) {
-          Thread::globally(function() { $this->buffer->pollEncoder(); });
-          usleep(10000);
-        }
-      }, function($buffer) { $this->buffer = $buffer; }, array($this));
-      // Add work for the worker
-      $GLOBALS['worker']->stack($GLOBALS['work']);
-
-      // // Register an event to periodically check the encoder state
-      // EventHandling::registerForEvent("connectionLoopEndEvent", $this,
-      //   "pollEncoder");
+      // Register an event to periodically check the encoder state
+      EventHandling::registerForEvent("connectionLoopEndEvent", $this,
+        "receiveConnectionLoopEnd");
       return true;
     }
   }
