@@ -64,11 +64,11 @@
       $this->welcome = ModuleManagement::getModuleByName("Welcome");
 
       // Create a Worker object
-      $this->worker  = new Worker();
+      $GLOBALS['worker'] = new Worker();
       // Start the worker
-      $this->worker->start();
+      $GLOBALS['worker']->start();
       // Add work to the worker
-      $this->worker->stack($this);
+      $GLOBALS['worker']->stack($this);
 
       return true;
     }
